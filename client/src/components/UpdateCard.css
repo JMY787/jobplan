@@ -1,0 +1,11 @@
+.update-card {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.update-card p {
+  margin: 8px 0;
+}

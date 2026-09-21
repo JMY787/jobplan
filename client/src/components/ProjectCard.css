@@ -1,0 +1,30 @@
+.project-card {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 16px;
+  transition: transform 0.2s ease;
+}
+
+.project-card h2 {
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.project-address {
+  color: #666;
+  margin-bottom: 12px;
+}
+
+.project-status {
+  font-weight: bold;
+}
+.project-card-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.project-card:hover {
+  transform: translateY(-3px);
+}
