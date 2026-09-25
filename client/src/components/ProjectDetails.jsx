@@ -2,20 +2,25 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import TaskCard from "./TaskCard";
 import UpdateCard from "./UpdateCard";
+import { API_URL } from "../api";
 
 function ProjectDetails() {
+  const user = JSON.parse(localStorage.getItem("user"));
+
   const { id } = useParams();
   const navigate = useNavigate();
+
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [tasks, setTasks] = useState([]);
   const [updates, setUpdates] = useState([]);
+
   useEffect(() => {
     setLoading(true);
     setError("");
 
-    fetch(`http://localhost:3000/api/projects/${id}`)
+    fetch(`${API_URL}/api/projects/${id}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Project not found");
@@ -34,19 +39,21 @@ function ProjectDetails() {
         setLoading(false);
       });
   }, [id]);
+
   useEffect(() => {
-    fetch(`http://localhost:3000/api/projects/${id}/tasks`)
+    fetch(`${API_URL}/api/projects/${id}/tasks`)
       .then((response) => response.json())
       .then((data) => {
         setTasks(data);
       });
 
-    fetch(`http://localhost:3000/api/projects/${id}/updates`)
+    fetch(`${API_URL}/api/projects/${id}/updates`)
       .then((response) => response.json())
       .then((data) => {
         setUpdates(data);
       });
   }, [id]);
+
   function handleDelete() {
     const confirmed = window.confirm(
       "Are you sure you want to delete this project?",
@@ -56,7 +63,7 @@ function ProjectDetails() {
       return;
     }
 
-    fetch(`http://localhost:3000/api/projects/${id}`, {
+    fetch(`${API_URL}/api/projects/${id}`, {
       method: "DELETE",
     })
       .then((response) => response.json())
@@ -64,6 +71,7 @@ function ProjectDetails() {
         navigate("/projects");
       });
   }
+
   if (loading) {
     return (
       <main>
@@ -100,45 +108,59 @@ function ProjectDetails() {
       </p>
 
       <p>
-        <strong>Start Date:</strong> {project.startDate}
+        <strong>Start Date:</strong> {project.start_date}
       </p>
 
       <p>
-        <strong>End Date:</strong> {project.endDate}
+        <strong>End Date:</strong> {project.end_date}
       </p>
-      <Link to={`/projects/${project.id}/edit`}>
-        <button>Edit Project</button>
-      </Link>
-      <button onClick={handleDelete}>Delete Project</button>
+
+      {user?.role === "Project Manager" && (
+        <>
+          <Link to={`/projects/${id}/edit`}>
+            <button>Edit Project</button>
+          </Link>
+
+          <button onClick={handleDelete}>Delete Project</button>
+        </>
+      )}
+
       <section>
         <h2>Tasks</h2>
 
-        <Link to={`/projects/${project.id}/tasks/new`}>
-          <button>+ New Task</button>
-        </Link>
+        {user?.role === "Project Manager" && (
+          <Link to={`/projects/${project.id}/tasks/new`}>
+            <button>+ New Task</button>
+          </Link>
+        )}
 
         {tasks.map((task) => (
           <TaskCard
             key={task.id}
+            id={task.id}
             title={task.title}
             description={task.description}
             status={task.status}
-            assignedTo={task.assignedTo}
-            dueDate={task.dueDate}
+            assignedTo={task.assigned_to}
+            dueDate={task.due_date}
           />
         ))}
       </section>
+
       <section>
         <h2>Project Updates</h2>
+
         <Link to={`/projects/${project.id}/updates/new`}>
           <button>+ New Update</button>
         </Link>
+
         {updates.map((update) => (
           <UpdateCard
             key={update.id}
+            id={update.id}
             message={update.message}
-            user={update.user}
-            createdAt={update.createdAt}
+            user={update.user || "JobPlan User"}
+            createdAt={update.created_at}
           />
         ))}
       </section>

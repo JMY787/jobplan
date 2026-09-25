@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ProjectCard from "./ProjectCard";
+import { API_URL } from "../api";
 
 function Dashboard() {
+  const user = JSON.parse(localStorage.getItem("user"));
+
   const [projects, setProjects] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/projects")
+    fetch(`${API_URL}/api/projects`)
       .then((response) => response.json())
       .then((data) => {
         setProjects(data);
@@ -29,9 +32,11 @@ function Dashboard() {
           <p>Welcome to JobPlan.</p>
         </div>
 
-        <Link to="/projects/new">
-          <button>+ New Project</button>
-        </Link>
+        {user?.role === "Project Manager" && (
+          <Link to="/projects/new">
+            <button>+ New Project</button>
+          </Link>
+        )}
       </div>
 
       <section>

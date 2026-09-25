@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import "./CreateProject.css";
+import { API_URL } from "../api";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -9,6 +10,7 @@ function Register() {
     password: "",
     role: "Worker",
   });
+
   function handleChange(event) {
     const { name, value } = event.target;
 
@@ -17,14 +19,36 @@ function Register() {
       [name]: value,
     });
   }
-  function handleSubmit(event) {
+
+  async function handleSubmit(event) {
     event.preventDefault();
 
-    console.log("Register:", formData);
+    try {
+      const response = await fetch(`${API_URL}/api/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log("User registered:", data);
+        alert("Account created successfully!");
+      } else {
+        alert(data.error);
+      }
+    } catch (error) {
+      console.error("Registration error:", error);
+    }
   }
+
   return (
     <main>
       <h1>Create Account</h1>
+
       <p>Register for a JobPlan account.</p>
 
       <form className="project-form" onSubmit={handleSubmit}>
@@ -80,6 +104,7 @@ function Register() {
 
         <button type="submit">Create Account</button>
       </form>
+
       <p>
         Already have an account? <Link to="/login">Login</Link>
       </p>

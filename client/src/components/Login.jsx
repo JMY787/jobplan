@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import "./CreateProject.css";
+import { API_URL } from "../api";
 
 function Login() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+
   function handleChange(event) {
     const { name, value } = event.target;
 
@@ -15,14 +17,39 @@ function Login() {
       [name]: value,
     });
   }
-  function handleSubmit(event) {
+
+  async function handleSubmit(event) {
     event.preventDefault();
 
-    console.log("Login:", formData);
+    try {
+      const response = await fetch(`${API_URL}/api/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log("Logged in:", data);
+
+        localStorage.setItem("user", JSON.stringify(data));
+
+        window.location.href = "/dashboard";
+      } else {
+        alert(data.error);
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+    }
   }
+
   return (
     <main>
       <h1>Login</h1>
+
       <p>Sign in to your JobPlan account.</p>
 
       <form className="project-form" onSubmit={handleSubmit}>
@@ -52,6 +79,7 @@ function Login() {
 
         <button type="submit">Login</button>
       </form>
+
       <p>
         Don't have an account? <Link to="/register">Create Account</Link>
       </p>

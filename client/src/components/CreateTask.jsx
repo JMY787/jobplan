@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./CreateProject.css";
+import { API_URL } from "../api";
+
 function CreateTask() {
   const { id } = useParams();
   const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -11,6 +14,7 @@ function CreateTask() {
     assignedTo: "",
     dueDate: "",
   });
+
   function handleChange(event) {
     const { name, value } = event.target;
 
@@ -19,10 +23,11 @@ function CreateTask() {
       [name]: value,
     });
   }
+
   function handleSubmit(event) {
     event.preventDefault();
 
-    fetch(`http://localhost:3000/api/projects/${id}/tasks`, {
+    fetch(`${API_URL}/api/projects/${id}/tasks`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -34,9 +39,11 @@ function CreateTask() {
         navigate(`/projects/${id}`);
       });
   }
+
   return (
     <main>
       <h1>Create Task</h1>
+
       <p>Add a new task to project {id}.</p>
 
       <form className="project-form" onSubmit={handleSubmit}>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./CreateProject.css";
+import { API_URL } from "../api";
 
 function EditProject() {
   const { id } = useParams();
@@ -16,10 +17,17 @@ function EditProject() {
   });
 
   useEffect(() => {
-    fetch(`http://localhost:3000/api/projects/${id}`)
+    fetch(`${API_URL}/api/projects/${id}`)
       .then((response) => response.json())
       .then((data) => {
-        setFormData(data);
+        setFormData({
+          name: data.name || "",
+          address: data.address || "",
+          description: data.description || "",
+          status: data.status || "Planning",
+          startDate: data.start_date || "",
+          endDate: data.end_date || "",
+        });
       });
   }, [id]);
 
@@ -35,7 +43,7 @@ function EditProject() {
   function handleSubmit(event) {
     event.preventDefault();
 
-    fetch(`http://localhost:3000/api/projects/${id}`, {
+    fetch(`${API_URL}/api/projects/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -51,11 +59,13 @@ function EditProject() {
   return (
     <main>
       <h1>Edit Project</h1>
+
       <p>Update the project information below.</p>
 
       <form className="project-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="name">Project Name</label>
+
           <input
             type="text"
             id="name"
@@ -67,6 +77,7 @@ function EditProject() {
 
         <div className="form-group">
           <label htmlFor="address">Address</label>
+
           <input
             type="text"
             id="address"
@@ -78,6 +89,7 @@ function EditProject() {
 
         <div className="form-group">
           <label htmlFor="description">Description</label>
+
           <textarea
             id="description"
             name="description"
@@ -88,6 +100,7 @@ function EditProject() {
 
         <div className="form-group">
           <label htmlFor="status">Status</label>
+
           <select
             id="status"
             name="status"
@@ -102,6 +115,7 @@ function EditProject() {
 
         <div className="form-group">
           <label htmlFor="startDate">Start Date</label>
+
           <input
             type="date"
             id="startDate"
@@ -113,6 +127,7 @@ function EditProject() {
 
         <div className="form-group">
           <label htmlFor="endDate">End Date</label>
+
           <input
             type="date"
             id="endDate"

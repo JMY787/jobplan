@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./CreateProject.css";
+import { API_URL } from "../api";
 
 function CreateProject() {
   const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: "",
     address: "",
@@ -25,7 +27,7 @@ function CreateProject() {
   function handleSubmit(event) {
     event.preventDefault();
 
-    fetch("http://localhost:3000/api/projects", {
+    fetch(`${API_URL}/api/projects`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -41,11 +43,13 @@ function CreateProject() {
   return (
     <main>
       <h1>Create Project</h1>
+
       <p>Add a new construction project to JobPlan.</p>
 
       <form className="project-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="name">Project Name</label>
+
           <input
             type="text"
             id="name"
@@ -57,6 +61,7 @@ function CreateProject() {
 
         <div className="form-group">
           <label htmlFor="address">Address</label>
+
           <input
             type="text"
             id="address"
@@ -68,6 +73,7 @@ function CreateProject() {
 
         <div className="form-group">
           <label htmlFor="description">Description</label>
+
           <textarea
             id="description"
             name="description"
@@ -78,6 +84,7 @@ function CreateProject() {
 
         <div className="form-group">
           <label htmlFor="status">Status</label>
+
           <select
             id="status"
             name="status"
@@ -92,6 +99,7 @@ function CreateProject() {
 
         <div className="form-group">
           <label htmlFor="startDate">Start Date</label>
+
           <input
             type="date"
             id="startDate"
@@ -103,6 +111,7 @@ function CreateProject() {
 
         <div className="form-group">
           <label htmlFor="endDate">End Date</label>
+
           <input
             type="date"
             id="endDate"
