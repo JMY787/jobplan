@@ -3,7 +3,11 @@ const cors = require("cors");
 const pool = require("./db");
 const bcrypt = require("bcryptjs");
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN || "http://localhost:5173",
+  }),
+);
 app.use(express.json());
 const PORT = process.env.PORT || 3000;
 pool
