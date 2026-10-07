@@ -188,22 +188,14 @@ app.get("/api/projects", async (req, res) => {
 });
 app.post("/api/projects", async (req, res) => {
   try {
-    const { name, address, description, status, start_date, end_date } =
-      req.body;
+    const { name, address, description, status, startDate, endDate } = req.body;
 
     const result = await pool.query(
       `INSERT INTO projects
       (name, address, description, status, start_date, end_date)
       VALUES ($1, $2, $3, $4, $5, $6)
       RETURNING *`,
-      [
-        name,
-        address,
-        description,
-        status,
-        start_date || null,
-        end_date || null,
-      ],
+      [name, address, description, status, startDate || null, endDate || null],
     );
 
     res.status(201).json(result.rows[0]);
@@ -235,8 +227,7 @@ app.put("/api/projects/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
-    const { name, address, description, status, start_date, end_date } =
-      req.body;
+    const { name, address, description, status, startDate, endDate } = req.body;
 
     const result = await pool.query(
       `UPDATE projects
@@ -253,8 +244,8 @@ app.put("/api/projects/:id", async (req, res) => {
         address,
         description,
         status,
-        start_date || null,
-        end_date || null,
+        startDate || null,
+        endDate || null,
         id,
       ],
     );
