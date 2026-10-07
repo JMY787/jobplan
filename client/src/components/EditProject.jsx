@@ -25,8 +25,8 @@ function EditProject() {
           address: data.address || "",
           description: data.description || "",
           status: data.status || "Planning",
-          startDate: data.start_date || "",
-          endDate: data.end_date || "",
+          startDate: data.start_date ? data.start_date.split("T")[0] : "",
+          endDate: data.end_date ? data.end_date.split("T")[0] : "",
         });
       });
   }, [id]);

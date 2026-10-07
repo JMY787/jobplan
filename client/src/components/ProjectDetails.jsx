@@ -108,11 +108,17 @@ function ProjectDetails() {
       </p>
 
       <p>
-        <strong>Start Date:</strong> {project.start_date}
+        <strong>Start Date:</strong>{" "}
+        {project.start_date
+          ? new Date(project.start_date).toLocaleDateString()
+          : "No Start Date"}
       </p>
 
       <p>
-        <strong>End Date:</strong> {project.end_date}
+        <strong>End Date:</strong>{" "}
+        {project.end_date
+          ? new Date(project.end_date).toLocaleDateString()
+          : "No End Date"}
       </p>
 
       {user?.role === "Project Manager" && (

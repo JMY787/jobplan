@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import "./CreateProject.css";
 import { API_URL } from "../api";
 
 function EditUpdate() {
@@ -36,14 +37,18 @@ function EditUpdate() {
     <main>
       <h1>Edit Update</h1>
 
-      <form onSubmit={handleSubmit}>
-        <label>
-          Message
+      <p>Update the project update below.</p>
+
+      <form className="project-form" onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="message">Message</label>
+
           <textarea
+            id="message"
             value={message}
             onChange={(event) => setMessage(event.target.value)}
           />
-        </label>
+        </div>
 
         <button type="submit">Save Changes</button>
       </form>
